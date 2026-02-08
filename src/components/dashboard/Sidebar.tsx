@@ -118,45 +118,10 @@ export const Sidebar = ({ activeTab, onTabChange, profile, onProfileUpdate }: Si
     <aside className="w-64 bg-sidebar text-sidebar-foreground flex flex-col fixed top-0 left-0 h-screen z-10">
       {/* Logo & Company */}
       <div className="p-6 border-b border-sidebar-border">
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2">
           <span className="text-xl font-bold text-primary">Almac</span>
           <span className="text-xl font-bold text-foreground">Zero</span>
         </div>
-        
-        {isEditing ? (
-          <div className="flex items-center gap-2">
-            <Input
-              value={editedName}
-              onChange={(e) => setEditedName(e.target.value)}
-              className="h-8 bg-sidebar-accent border-sidebar-border text-sidebar-foreground text-sm"
-              autoFocus
-            />
-            <button
-              onClick={handleSaveCompanyName}
-              className="text-primary hover:text-primary/80"
-            >
-              <Check className="h-4 w-4" />
-            </button>
-            <button
-              onClick={handleCancelEdit}
-              className="text-muted-foreground hover:text-sidebar-foreground"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          </div>
-        ) : (
-          <div className="flex items-center gap-2 group">
-            <span className="text-sm text-muted-foreground truncate">
-              {profile?.company_name || 'Your Company'}
-            </span>
-            <button
-              onClick={() => setIsEditing(true)}
-              className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-sidebar-foreground transition-opacity"
-            >
-              <Pencil className="h-3 w-3" />
-            </button>
-          </div>
-        )}
       </div>
 
       {/* Base Year Setting */}
