@@ -1,92 +1,98 @@
 import { useAuth } from '@/contexts/AuthContext';
-import { ArrowRight, BarChart3, Target, Award } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AlmacLogo } from '@/components/ui/AlmacLogo';
 
 const Index = () => {
   const { user, loading } = useAuth();
+  const navigate = useNavigate();
+  const [displayText, setDisplayText] = useState('');
+  const [isTypingComplete, setIsTypingComplete] = useState(false);
+  const fullText = 'Track. Reduce. Zero.';
+
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard');
+    }
+  }, [user, navigate]);
+
+  useEffect(() => {
+    if (loading) return;
+    
+    let currentIndex = 0;
+    const typingInterval = setInterval(() => {
+      if (currentIndex <= fullText.length) {
+        setDisplayText(fullText.slice(0, currentIndex));
+        currentIndex++;
+      } else {
+        clearInterval(typingInterval);
+        setIsTypingComplete(true);
+      }
+    }, 100);
+
+    return () => clearInterval(typingInterval);
+  }, [loading]);
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-primary/5">
-        <div className="animate-pulse flex items-center gap-3">
-          <span className="text-xl font-bold text-primary">NetZero Platform</span>
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="animate-pulse">
+          <AlmacLogo className="h-12" />
         </div>
       </div>
     );
   }
 
   if (user) {
-    // Redirect authenticated users to dashboard
-    window.location.href = '/dashboard';
     return null;
   }
 
-  const features = [
-    {
-      icon: BarChart3,
-      title: 'Emissions Tracking',
-      description: 'Track Scope 1, 2 & 3 emissions with multi-year analysis',
-    },
-    {
-      icon: Target,
-      title: 'Net-Zero Planning',
-      description: 'Set science-based targets and visualize reduction pathways',
-    },
-    {
-      icon: Award,
-      title: 'ESG Scorecards',
-      description: 'Generate performance badges and industry benchmarks',
-    },
-  ];
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
+    <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
-      <header className="container mx-auto px-4 py-6 flex items-center justify-between">
+      <header className="w-full px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <span className="text-xl font-bold text-primary">NetZero Platform</span>
+          <AlmacLogo className="h-10" />
+          <span className="text-lg font-semibold text-foreground">Zero</span>
         </div>
-        <Button onClick={() => window.location.href = '/auth'}>
-          Get Started
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
+        <Tabs defaultValue="signin" className="w-auto">
+          <TabsList className="bg-muted">
+            <TabsTrigger 
+              value="signin" 
+              onClick={() => navigate('/auth?tab=login')}
+              className="data-[state=active]:bg-background"
+            >
+              Sign In
+            </TabsTrigger>
+            <TabsTrigger 
+              value="register" 
+              onClick={() => navigate('/auth?tab=signup')}
+              className="data-[state=active]:bg-background"
+            >
+              Register
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
       </header>
 
-      {/* Hero */}
-      <main className="container mx-auto px-4 py-20 text-center">
-        <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-          Track Your Path to
-          <span className="text-primary block">Net-Zero</span>
-        </h1>
-        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
-          The complete sustainability platform for tracking emissions, setting science-based targets, 
-          and generating ESG performance scorecards.
-        </p>
-        <Button size="lg" onClick={() => window.location.href = '/auth'}>
-          Start Free Trial
-          <ArrowRight className="ml-2 h-5 w-5" />
-        </Button>
-
-        {/* Features */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-24">
-          {features.map((feature) => (
-            <div 
-              key={feature.title}
-              className="p-6 rounded-xl bg-card border shadow-sm hover:shadow-md transition-shadow"
-            >
-              <div className="bg-primary/10 w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <feature.icon className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-              <p className="text-muted-foreground">{feature.description}</p>
-            </div>
-          ))}
+      {/* Hero - Centered typing animation */}
+      <main className="flex-1 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground tracking-tight">
+            {displayText}
+            <span 
+              className={`inline-block w-1 h-12 md:h-16 lg:h-20 bg-primary ml-1 ${
+                isTypingComplete ? 'animate-pulse' : 'animate-pulse'
+              }`}
+            />
+          </h1>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="container mx-auto px-4 py-8 text-center text-muted-foreground text-sm">
-        © {new Date().getFullYear()} NETZ. All rights reserved.
+      <footer className="w-full px-6 py-4 text-center text-muted-foreground text-sm">
+        © {new Date().getFullYear()} Almac Group. Internal Use Only.
       </footer>
     </div>
   );

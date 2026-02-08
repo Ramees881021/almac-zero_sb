@@ -118,7 +118,10 @@ export const Sidebar = ({ activeTab, onTabChange, profile, onProfileUpdate }: Si
     <aside className="w-64 bg-sidebar text-sidebar-foreground flex flex-col fixed top-0 left-0 h-screen z-10">
       {/* Logo & Company */}
       <div className="p-6 border-b border-sidebar-border">
-        <span className="text-xl font-bold text-primary mb-4 block">NetZero Platform</span>
+        <div className="flex items-center gap-2 mb-4">
+          <span className="text-xl font-bold text-primary">Almac</span>
+          <span className="text-xl font-bold text-foreground">Zero</span>
+        </div>
         
         {isEditing ? (
           <div className="flex items-center gap-2">
