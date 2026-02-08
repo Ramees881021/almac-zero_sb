@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Leaf, Loader2, Eye, EyeOff } from 'lucide-react';
+import { Loader2, Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface LoginFormProps {
@@ -30,30 +30,24 @@ export const LoginForm = ({ onSwitchToSignup, onForgotPassword }: LoginFormProps
       setLoading(false);
     } else {
       toast.success('Welcome back!');
-      // Use full page redirect for reliable session sync
       window.location.href = '/dashboard';
     }
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto animate-fade-in shadow-lg border-0">
-      <CardHeader className="text-center space-y-4">
-        <div className="flex justify-center">
-          <div className="bg-primary/10 p-3 rounded-full">
-            <Leaf className="h-8 w-8 text-primary" />
-          </div>
-        </div>
-        <CardTitle className="text-2xl font-bold">Welcome to NETZ</CardTitle>
+    <Card className="w-full border-0 shadow-none">
+      <CardHeader className="text-center space-y-2 px-0">
+        <CardTitle className="text-2xl font-bold">Welcome to Almac Zero</CardTitle>
         <CardDescription>Sign in to your sustainability dashboard</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 px-0">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Work Email</Label>
             <Input
               id="email"
               type="email"
-              placeholder="you@company.com"
+              placeholder="you@almacgroup.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -87,17 +81,11 @@ export const LoginForm = ({ onSwitchToSignup, onForgotPassword }: LoginFormProps
             Forgot password?
           </button>
         </CardContent>
-        <CardFooter className="flex flex-col gap-4">
+        <CardFooter className="flex flex-col gap-4 px-0">
           <Button type="submit" className="w-full" disabled={loading}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Sign In
           </Button>
-          <p className="text-sm text-muted-foreground">
-            Don't have an account?{' '}
-            <button type="button" onClick={onSwitchToSignup} className="text-primary hover:underline font-medium">
-              Sign up
-            </button>
-          </p>
         </CardFooter>
       </form>
     </Card>

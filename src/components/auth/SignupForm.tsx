@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Leaf, Loader2, Eye, EyeOff, Check, X } from 'lucide-react';
+import { Loader2, Eye, EyeOff, Check, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface SignupFormProps {
@@ -15,7 +15,6 @@ export const SignupForm = ({ onSwitchToLogin }: SignupFormProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [companyName, setCompanyName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { signUp } = useAuth();
@@ -45,7 +44,8 @@ export const SignupForm = ({ onSwitchToLogin }: SignupFormProps) => {
 
     setLoading(true);
 
-    const { error } = await signUp(email, password, companyName);
+    // Default company name to Almac Group for internal tool
+    const { error } = await signUp(email, password, 'Almac Group');
 
     if (error) {
       toast.error(error.message);
@@ -68,35 +68,19 @@ export const SignupForm = ({ onSwitchToLogin }: SignupFormProps) => {
   );
 
   return (
-    <Card className="w-full max-w-md mx-auto animate-fade-in shadow-lg border-0">
-      <CardHeader className="text-center space-y-4">
-        <div className="flex justify-center">
-          <div className="bg-primary/10 p-3 rounded-full">
-            <Leaf className="h-8 w-8 text-primary" />
-          </div>
-        </div>
+    <Card className="w-full border-0 shadow-none">
+      <CardHeader className="text-center space-y-2 px-0">
         <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
-        <CardDescription>Start tracking your sustainability journey</CardDescription>
+        <CardDescription>Join Almac Zero to track your sustainability journey</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 px-0">
           <div className="space-y-2">
-            <Label htmlFor="company">Company Name</Label>
-            <Input
-              id="company"
-              type="text"
-              placeholder="Your Company Ltd"
-              value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Work Email</Label>
             <Input
               id="email"
               type="email"
-              placeholder="you@company.com"
+              placeholder="you@almacgroup.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -157,17 +141,11 @@ export const SignupForm = ({ onSwitchToLogin }: SignupFormProps) => {
             )}
           </div>
         </CardContent>
-        <CardFooter className="flex flex-col gap-4">
+        <CardFooter className="flex flex-col gap-4 px-0">
           <Button type="submit" className="w-full" disabled={loading || !isPasswordValid || !passwordsMatch}>
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Create Account
           </Button>
-          <p className="text-sm text-muted-foreground">
-            Already have an account?{' '}
-            <button type="button" onClick={onSwitchToLogin} className="text-primary hover:underline font-medium">
-              Sign in
-            </button>
-          </p>
         </CardFooter>
       </form>
     </Card>

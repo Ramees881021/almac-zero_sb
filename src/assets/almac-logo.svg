@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 50">
+  <defs>
+    <linearGradient id="almacGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#C41230"/>
+      <stop offset="100%" style="stop-color:#8B0D22"/>
+    </linearGradient>
+  </defs>
+  <!-- Curved arc above text -->
+  <path d="M 5 25 Q 40 5 75 25" stroke="url(#almacGrad)" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- ALMAC text -->
+  <text x="5" y="42" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#333333" letter-spacing="2">ALMAC</text>
+</svg>
