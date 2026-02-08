@@ -14,6 +14,7 @@ import { CarbonBudgetTab } from '@/components/dashboard/CarbonBudgetTab';
 import { OrganisationTab } from '@/components/dashboard/OrganisationTab';
 import { ReportingTab } from '@/components/dashboard/ReportingTab';
 import { PredictiveAnalyticsTab } from '@/components/dashboard/PredictiveAnalyticsTab';
+import { AlmacLogo } from '@/components/ui/AlmacLogo';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -93,6 +94,10 @@ const DashboardContent = () => {
         onProfileUpdate={handleProfileUpdate}
       />
       <div className="flex-1 flex flex-col ml-64">
+        {/* Top center logo */}
+        <div className="w-full py-4 flex justify-center border-b bg-card">
+          <AlmacLogo className="h-10" />
+        </div>
         <DashboardHeader />
         <main className={cn(
           "flex-1 p-6 overflow-auto transition-all duration-300",

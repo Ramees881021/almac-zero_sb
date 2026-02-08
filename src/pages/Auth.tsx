@@ -24,11 +24,10 @@ const Auth = () => {
   if (view === 'forgot-password') {
     return (
       <div className="min-h-screen flex flex-col bg-white">
-        <header className="w-full px-6 py-4">
-          <div className="flex items-center gap-3">
+        <header className="w-full px-6 py-4 flex justify-center">
+          <a href="/">
             <AlmacLogo className="h-10" />
-            <span className="text-lg font-semibold text-foreground">Zero</span>
-          </div>
+          </a>
         </header>
         <div className="flex-1 flex items-center justify-center p-4">
           <div className="w-full max-w-md">
@@ -41,10 +40,9 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <header className="w-full px-6 py-4">
-        <a href="/" className="flex items-center gap-3 w-fit">
+      <header className="w-full px-6 py-4 flex justify-center">
+        <a href="/">
           <AlmacLogo className="h-10" />
-          <span className="text-lg font-semibold text-foreground">Zero</span>
         </a>
       </header>
       <div className="flex-1 flex items-center justify-center p-4">
