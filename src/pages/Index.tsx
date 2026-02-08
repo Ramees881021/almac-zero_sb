@@ -74,7 +74,7 @@ const Index = () => {
       </header>
 
       {/* Hero - Centered content */}
-      <main className="flex-1 flex items-center justify-center">
+      <main className="flex-1 flex items-center justify-center pb-20">
         <div className="text-center space-y-6">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
             <span className="text-foreground">Almac</span>
