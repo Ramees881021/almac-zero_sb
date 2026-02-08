@@ -147,7 +147,7 @@ export const Sidebar = ({
       <div className="p-6 border-b border-sidebar-border">
         <div className="flex items-center gap-0">
           <span className="text-xl font-bold text-[#f0f0f0]">Almac</span>
-          <span className="text-xl font-bold" style={{ color: '#cf2e2e' }}>Zero</span>
+          <span className="text-xl font-bold" style={{ color: '#00d084' }}>Zero</span>
         </div>
       </div>
 
