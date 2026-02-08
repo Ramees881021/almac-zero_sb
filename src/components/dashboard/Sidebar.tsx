@@ -3,14 +3,16 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useDashboard } from '@/contexts/DashboardContext';
 import { useMode } from '@/contexts/ModeContext';
 import { supabase } from '@/integrations/supabase/client';
-import { LayoutDashboard, BarChart3, Award, Users, Target, LogOut, Pencil, Check, X, Calendar, Wallet, Building2, ClipboardCheck, BrainCircuit } from 'lucide-react';
+import { LayoutDashboard, BarChart3, Award, Users, Target, LogOut, Pencil, Check, X, Calendar, Wallet, Building2, ClipboardCheck, BrainCircuit, UsersRound } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { ModeToggle } from './ModeToggle';
-type TabType = 'overview' | 'emissions' | 'scorecard' | 'clients' | 'netzero' | 'carbonbudget' | 'organisation' | 'reporting' | 'predictive';
+
+type TabType = 'overview' | 'emissions' | 'scorecard' | 'clients' | 'netzero' | 'carbonbudget' | 'organisation' | 'reporting' | 'predictive' | 'users';
+
 interface Profile {
   id: string;
   user_id: string;
@@ -20,17 +22,20 @@ interface Profile {
   currency: string;
   base_year: number | null;
 }
+
 interface SidebarProps {
   activeTab: TabType;
   onTabChange: (tab: TabType) => void;
   profile: Profile | null;
   onProfileUpdate: (profile: Profile) => void;
+  isAdmin?: boolean;
 }
 const navItems: {
   id: TabType;
   label: string;
   icon: React.ElementType;
   businessOnly?: boolean;
+  adminOnly?: boolean;
 }[] = [{
   id: 'organisation',
   label: 'Organisation',
@@ -72,6 +77,12 @@ const navItems: {
   label: 'Compliance',
   icon: ClipboardCheck,
   businessOnly: true
+}, {
+  id: 'users',
+  label: 'Users',
+  icon: UsersRound,
+  businessOnly: true,
+  adminOnly: true
 }];
 const currentYear = new Date().getFullYear();
 const baseYearOptions = Array.from({
@@ -81,7 +92,8 @@ export const Sidebar = ({
   activeTab,
   onTabChange,
   profile,
-  onProfileUpdate
+  onProfileUpdate,
+  isAdmin = false
 }: SidebarProps) => {
   const {
     signOut
@@ -96,9 +108,10 @@ export const Sidebar = ({
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(profile?.company_name || '');
 
-  // Filter nav items based on mode
+  // Filter nav items based on mode and admin status
   const filteredNavItems = navItems.filter(item => {
     if (isPresenterMode && item.businessOnly) return false;
+    if (item.adminOnly && !isAdmin) return false;
     return true;
   });
   const handleSaveCompanyName = async () => {
