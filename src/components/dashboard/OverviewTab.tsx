@@ -3,8 +3,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useDashboard } from '@/contexts/DashboardContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { TrendingDown, TrendingUp, Factory, Zap, Globe, DollarSign, Target, ArrowDown, ArrowUp, Minus } from 'lucide-react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend, LineChart, Line, ReferenceLine } from 'recharts';
+import { TrendingDown, TrendingUp, Factory, Zap, Globe, DollarSign, Target, ArrowDown, ArrowUp, Minus, Truck } from 'lucide-react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend, LineChart, Line, ReferenceLine, PieChart, Pie, Cell } from 'recharts';
 
 interface EmissionsData {
   id: string;
@@ -184,7 +184,7 @@ export const OverviewTab = () => {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         <KpiCard
           title="Total Emissions"
           value={totalEmissions.toLocaleString()}
@@ -206,12 +206,76 @@ export const OverviewTab = () => {
           icon={Zap}
         />
         <KpiCard
+          title="Scope 3"
+          value={(currentData?.scope_3_emissions || 0).toLocaleString()}
+          unit="tCO₂e"
+          icon={Truck}
+        />
+        <KpiCard
           title="Carbon Intensity"
           value={currentIntensity.toFixed(2)}
           unit={`tCO₂e/M${currencySymbol}`}
           icon={DollarSign}
         />
       </div>
+
+      {/* Scope Distribution Doughnut Chart */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Emissions by Scope</CardTitle>
+          <CardDescription>Scope 1, 2 & 3 distribution for {selectedYear}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="h-72 flex items-center justify-center">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={[
+                    { name: 'Scope 1', value: currentData?.scope_1_emissions || 0 },
+                    { name: 'Scope 2', value: currentData?.scope_2_emissions || 0 },
+                    { name: 'Scope 3', value: currentData?.scope_3_emissions || 0 },
+                  ]}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={80}
+                  outerRadius={110}
+                  paddingAngle={2}
+                  dataKey="value"
+                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
+                  labelLine={true}
+                >
+                  <Cell fill="hsl(var(--chart-1))" />
+                  <Cell fill="hsl(var(--chart-2))" />
+                  <Cell fill="hsl(var(--chart-3))" />
+                </Pie>
+                <Tooltip formatter={(value: number) => `${value.toLocaleString()} tCO₂e`} />
+                <Legend />
+                {/* Center label */}
+                <text
+                  x="50%"
+                  y="46%"
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  className="fill-foreground"
+                  style={{ fontSize: '14px', fontWeight: 500 }}
+                >
+                  Total
+                </text>
+                <text
+                  x="50%"
+                  y="54%"
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  className="fill-foreground"
+                  style={{ fontSize: '20px', fontWeight: 700 }}
+                >
+                  {totalEmissions.toLocaleString()}
+                </text>
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Base Year Reduction Tracking */}
       {baseYear && (
