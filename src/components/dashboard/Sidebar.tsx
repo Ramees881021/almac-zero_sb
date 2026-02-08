@@ -79,7 +79,7 @@ const navItems: {
   businessOnly: true
 }, {
   id: 'users',
-  label: 'Users',
+  label: 'User Management',
   icon: UsersRound,
   businessOnly: true,
   adminOnly: true
