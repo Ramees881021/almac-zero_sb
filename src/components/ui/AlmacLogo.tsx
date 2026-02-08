@@ -1,4 +1,4 @@
-import almacLogo from '@/assets/almac-logo.svg';
+import almacLogo from '@/assets/almac-logo.png';
 
 interface AlmacLogoProps {
   className?: string;
