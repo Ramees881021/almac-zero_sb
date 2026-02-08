@@ -24,11 +24,12 @@ const Auth = () => {
   if (view === 'forgot-password') {
     return (
       <div className="min-h-screen flex flex-col bg-white">
-        <header className="w-full px-6 py-4 flex justify-center">
-          <a href="/">
-            <AlmacLogo className="h-10" />
-          </a>
-        </header>
+      <header className="w-full px-6 py-4 flex justify-start">
+        <a href="/" className="flex items-center gap-1">
+          <AlmacLogo className="h-10" />
+          <span style={{ color: '#cf2e2e' }} className="text-2xl font-bold">Zero</span>
+        </a>
+      </header>
         <div className="flex-1 flex items-center justify-center p-4">
           <div className="w-full max-w-md">
             <ForgotPasswordForm onBack={() => setView('login')} />
@@ -40,9 +41,10 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <header className="w-full px-6 py-4 flex justify-center">
-        <a href="/">
+      <header className="w-full px-6 py-4 flex justify-start">
+        <a href="/" className="flex items-center gap-1">
           <AlmacLogo className="h-10" />
+          <span style={{ color: '#cf2e2e' }} className="text-2xl font-bold">Zero</span>
         </a>
       </header>
       <div className="flex-1 flex items-center justify-center p-4">
