@@ -76,17 +76,21 @@ const Index = () => {
         </Tabs>
       </header>
 
-      {/* Hero - Centered typing animation */}
+      {/* Hero - Centered content */}
       <main className="flex-1 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground tracking-tight">
+        <div className="text-center space-y-6">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+            <span className="text-foreground">Almac</span>
+            <span className="text-primary">Zero</span>
+          </h1>
+          <p className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground tracking-tight">
             {displayText}
             <span 
-              className={`inline-block w-1 h-12 md:h-16 lg:h-20 bg-primary ml-1 ${
+              className={`inline-block w-1 h-12 md:h-16 lg:h-20 bg-primary ml-1 align-middle ${
                 isTypingComplete ? 'animate-pulse' : 'animate-pulse'
               }`}
             />
-          </h1>
+          </p>
         </div>
       </main>
 
