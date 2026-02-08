@@ -10,9 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { ModeToggle } from './ModeToggle';
-
 type TabType = 'overview' | 'emissions' | 'scorecard' | 'clients' | 'netzero' | 'carbonbudget' | 'organisation' | 'reporting' | 'predictive' | 'users';
-
 interface Profile {
   id: string;
   user_id: string;
@@ -22,7 +20,6 @@ interface Profile {
   currency: string;
   base_year: number | null;
 }
-
 interface SidebarProps {
   activeTab: TabType;
   onTabChange: (tab: TabType) => void;
@@ -160,7 +157,9 @@ export const Sidebar = ({
       <div className="p-6 border-b border-sidebar-border">
         <div className="flex items-center gap-0">
           <span className="text-xl font-bold text-[#f0f0f0]">Almac</span>
-          <span className="text-xl font-bold" style={{ color: '#00d084' }}>Zero</span>
+          <span className="text-xl font-bold" style={{
+          color: '#00d084'
+        }}>Zero</span>
         </div>
       </div>
 
@@ -192,8 +191,7 @@ export const Sidebar = ({
       <nav className="flex-1 p-4 overflow-y-auto">
         <ul className="space-y-1">
           {filteredNavItems.map(item => <li key={item.id} className="animate-fade-in">
-              <button onClick={() => onTabChange(item.id)} className={cn("w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-300", activeTab === item.id ? "bg-sidebar-primary text-sidebar-primary-foreground" : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground")}>
-                <item.icon className="h-5 w-5" />
+              <button onClick={() => onTabChange(item.id)} className={cn("w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-300", activeTab === item.id ? "bg-sidebar-primary text-sidebar-primary-foreground" : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground")}>UserManagement<item.icon className="h-5 w-5" />
                 {item.label}
               </button>
             </li>)}
