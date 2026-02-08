@@ -50,9 +50,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      {/* Header with centered logo */}
-      <header className="w-full px-6 py-4 flex flex-col items-center">
-        <AlmacLogo className="h-10 mb-4" />
+      {/* Header with logo left, tabs right */}
+      <header className="w-full px-6 py-4 flex items-center justify-between">
+        <AlmacLogo className="h-10" />
         <Tabs defaultValue="signin" className="w-auto">
           <TabsList className="bg-muted">
             <TabsTrigger 
