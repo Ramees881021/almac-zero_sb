@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AlmacLogo } from '@/components/ui/AlmacLogo';
+import facilityBackground from '@/assets/facility-background.png';
 
 const Index = () => {
   const { user, loading } = useAuth();
@@ -51,7 +52,7 @@ const Index = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="min-h-screen flex items-center justify-center bg-slate-900">
         <div className="animate-pulse">
           <AlmacLogo className="h-12" />
         </div>
@@ -64,9 +65,20 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen relative flex flex-col overflow-hidden">
+      {/* Background Layer */}
+      <div className="fixed inset-0 -z-10">
+        <img 
+          src={facilityBackground} 
+          alt="" 
+          className="w-full h-full object-cover scale-105 blur-[2px]"
+        />
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/80 via-slate-900/70 to-emerald-950/60" />
+      </div>
+
       {/* Header with logo left, tabs right */}
-      <header className="w-full px-6 py-4 flex items-center justify-between">
+      <header className="w-full px-6 py-4 flex items-center justify-between relative z-10">
         <AlmacLogo className="h-10" />
         <Tabs defaultValue="signin" className="w-auto">
           <TabsList className="bg-muted">
@@ -89,13 +101,13 @@ const Index = () => {
       </header>
 
       {/* Hero - Centered content */}
-      <main className="flex-1 flex items-center justify-center pb-20">
+      <main className="flex-1 flex items-center justify-center pb-20 relative z-10">
         <div className="text-center space-y-6">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
-            <span className="text-foreground">Almac</span>
+            <span className="text-white">Almac</span>
             <span style={{ color: '#00d084' }}>Zero</span>
           </h1>
-          <p className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground tracking-tight">
+          <p className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight">
             {displayText}
             <span 
               className={`inline-block w-1 h-12 md:h-16 lg:h-20 bg-primary ml-1 align-middle ${
@@ -107,7 +119,7 @@ const Index = () => {
       </main>
 
       {/* Footer */}
-      <footer className="w-full px-6 py-4 text-center text-muted-foreground text-sm">
+      <footer className="w-full px-6 py-4 text-center text-white/70 text-sm relative z-10">
         © {new Date().getFullYear()} Almac Group. Internal Use Only.
       </footer>
     </div>
