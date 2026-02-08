@@ -145,9 +145,9 @@ export const Sidebar = ({
   return <aside className="w-64 bg-sidebar text-sidebar-foreground flex flex-col fixed top-0 left-0 h-screen z-10">
       {/* Logo & Company */}
       <div className="p-6 border-b border-sidebar-border">
-        <div className="flex items-center gap-2">
-          <span className="text-xl font-bold text-[#f0f0f0]">AlmacZero</span>
-          <span className="text-xl font-bold text-foreground">Zero</span>
+        <div className="flex items-center gap-0">
+          <span className="text-xl font-bold text-[#f0f0f0]">Almac</span>
+          <span className="text-xl font-bold" style={{ color: '#cf2e2e' }}>Zero</span>
         </div>
       </div>
 
