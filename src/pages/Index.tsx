@@ -21,23 +21,32 @@ const Index = () => {
     if (loading) return;
     
     let currentIndex = 0;
+    let isPaused = false;
     
-    const typingInterval = setInterval(() => {
-      if (currentIndex <= fullText.length) {
-        setDisplayText(fullText.slice(0, currentIndex));
-        currentIndex++;
-        if (currentIndex > fullText.length) {
-          setIsTypingComplete(true);
+    const runTyping = () => {
+      const typingInterval = setInterval(() => {
+        if (currentIndex <= fullText.length) {
+          setDisplayText(fullText.slice(0, currentIndex));
+          currentIndex++;
+          if (currentIndex > fullText.length) {
+            setIsTypingComplete(true);
+            clearInterval(typingInterval);
+            // 2 second pause then clear and restart
+            setTimeout(() => {
+              setDisplayText('');
+              setIsTypingComplete(false);
+              currentIndex = 0;
+              runTyping();
+            }, 2000);
+          }
         }
-      } else {
-        // Pause complete, clear and restart
-        setDisplayText('');
-        setIsTypingComplete(false);
-        currentIndex = 0;
-      }
-    }, currentIndex > fullText.length ? 2000 : 100); // 2s pause after complete, 100ms for typing
-
-    return () => clearInterval(typingInterval);
+      }, 150); // Slower typing speed
+      
+      return typingInterval;
+    };
+    
+    const interval = runTyping();
+    return () => clearInterval(interval);
   }, [loading]);
 
   if (loading) {
