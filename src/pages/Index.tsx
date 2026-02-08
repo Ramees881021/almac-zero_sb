@@ -21,13 +21,27 @@ const Index = () => {
     if (loading) return;
     
     let currentIndex = 0;
+    let isDeleting = false;
+    
     const typingInterval = setInterval(() => {
-      if (currentIndex <= fullText.length) {
-        setDisplayText(fullText.slice(0, currentIndex));
-        currentIndex++;
+      if (!isDeleting) {
+        if (currentIndex <= fullText.length) {
+          setDisplayText(fullText.slice(0, currentIndex));
+          currentIndex++;
+        } else {
+          setIsTypingComplete(true);
+          setTimeout(() => {
+            isDeleting = true;
+          }, 2000); // Pause before deleting
+        }
       } else {
-        clearInterval(typingInterval);
-        setIsTypingComplete(true);
+        if (currentIndex > 0) {
+          currentIndex--;
+          setDisplayText(fullText.slice(0, currentIndex));
+        } else {
+          isDeleting = false;
+          setIsTypingComplete(false);
+        }
       }
     }, 100);
 
