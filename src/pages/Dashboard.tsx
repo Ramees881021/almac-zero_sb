@@ -14,11 +14,13 @@ import { CarbonBudgetTab } from '@/components/dashboard/CarbonBudgetTab';
 import { OrganisationTab } from '@/components/dashboard/OrganisationTab';
 import { ReportingTab } from '@/components/dashboard/ReportingTab';
 import { PredictiveAnalyticsTab } from '@/components/dashboard/PredictiveAnalyticsTab';
+import { UsersTab } from '@/components/dashboard/UsersTab';
 import { AlmacLogo } from '@/components/ui/AlmacLogo';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAdmin } from '@/hooks/useAdmin';
 
-type TabType = 'overview' | 'emissions' | 'scorecard' | 'clients' | 'netzero' | 'carbonbudget' | 'organisation' | 'reporting' | 'predictive';
+type TabType = 'overview' | 'emissions' | 'scorecard' | 'clients' | 'netzero' | 'carbonbudget' | 'organisation' | 'reporting' | 'predictive' | 'users';
 
 interface Profile {
   id: string;
@@ -34,13 +36,14 @@ const DashboardContent = () => {
   const { user } = useAuth();
   const { setCurrency, setBaseYear } = useDashboard();
   const { isPresenterMode } = useMode();
+  const { isAdmin } = useAdmin();
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Reset to valid tab when switching modes
   useEffect(() => {
-    const businessOnlyTabs: TabType[] = ['predictive', 'scorecard', 'clients', 'carbonbudget', 'reporting'];
+    const businessOnlyTabs: TabType[] = ['predictive', 'scorecard', 'clients', 'carbonbudget', 'reporting', 'users'];
     if (isPresenterMode && businessOnlyTabs.includes(activeTab)) {
       setActiveTab('overview');
     }
@@ -92,6 +95,7 @@ const DashboardContent = () => {
         onTabChange={setActiveTab}
         profile={profile}
         onProfileUpdate={handleProfileUpdate}
+        isAdmin={isAdmin}
       />
       <div className="flex-1 flex flex-col ml-64">
         {/* Top center logo */}
@@ -112,6 +116,7 @@ const DashboardContent = () => {
           {activeTab === 'netzero' && <NetZeroTab />}
           {activeTab === 'carbonbudget' && !isPresenterMode && <CarbonBudgetTab />}
           {activeTab === 'reporting' && !isPresenterMode && <ReportingTab />}
+          {activeTab === 'users' && !isPresenterMode && isAdmin && <UsersTab />}
         </main>
       </div>
     </div>

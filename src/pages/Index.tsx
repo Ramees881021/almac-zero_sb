@@ -3,9 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AlmacLogo } from '@/components/ui/AlmacLogo';
+import { useAdmin } from '@/hooks/useAdmin';
+import { Shield } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const Index = () => {
   const { user, loading } = useAuth();
+  const { isAdmin, loading: adminLoading } = useAdmin();
   const navigate = useNavigate();
   const [displayText, setDisplayText] = useState('');
   const [isTypingComplete, setIsTypingComplete] = useState(false);
@@ -68,24 +72,39 @@ const Index = () => {
       {/* Header with logo left, tabs right */}
       <header className="w-full px-6 py-4 flex items-center justify-between">
         <AlmacLogo className="h-10" />
-        <Tabs defaultValue="signin" className="w-auto">
-          <TabsList className="bg-muted">
-            <TabsTrigger 
-              value="signin" 
-              onClick={() => navigate('/auth?tab=login')}
-              className="data-[state=active]:bg-background"
+        <div className="flex items-center gap-4">
+          {user && isAdmin && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/dashboard')}
+              className="flex items-center gap-2"
             >
-              Sign In
-            </TabsTrigger>
-            <TabsTrigger 
-              value="register" 
-              onClick={() => navigate('/auth?tab=signup')}
-              className="data-[state=active]:bg-background"
-            >
-              Register
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
+              <Shield className="h-4 w-4" />
+              Admin Panel
+            </Button>
+          )}
+          {!user && (
+            <Tabs defaultValue="signin" className="w-auto">
+              <TabsList className="bg-muted">
+                <TabsTrigger 
+                  value="signin" 
+                  onClick={() => navigate('/auth?tab=login')}
+                  className="data-[state=active]:bg-background"
+                >
+                  Sign In
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="register" 
+                  onClick={() => navigate('/auth?tab=signup')}
+                  className="data-[state=active]:bg-background"
+                >
+                  Register
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          )}
+        </div>
       </header>
 
       {/* Hero - Centered content */}
