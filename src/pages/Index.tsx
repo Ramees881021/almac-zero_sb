@@ -78,7 +78,7 @@ const Index = () => {
         <div className="text-center space-y-6">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
             <span className="text-foreground">Almac</span>
-            <span className="text-primary">Zero</span>
+            <span style={{ color: '#cf2e2e' }}>Zero</span>
           </h1>
           <p className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground tracking-tight">
             {displayText}
