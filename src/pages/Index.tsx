@@ -52,10 +52,7 @@ const Index = () => {
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
       <header className="w-full px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <AlmacLogo className="h-10" />
-          <span className="text-lg font-semibold text-foreground">Zero</span>
-        </div>
+        <AlmacLogo className="h-10" />
         <Tabs defaultValue="signin" className="w-auto">
           <TabsList className="bg-muted">
             <TabsTrigger 
