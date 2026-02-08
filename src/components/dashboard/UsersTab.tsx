@@ -14,12 +14,10 @@ interface UserProfile {
   id: string;
   user_id: string;
   company_name: string;
-  industry: string | null;
-  company_size: string | null;
+  email: string | null;
   currency: string;
   base_year: number | null;
   created_at: string;
-  email?: string;
 }
 
 interface UserRole {
@@ -207,8 +205,7 @@ export const UsersTab = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Company Name</TableHead>
-                <TableHead>Industry</TableHead>
+                <TableHead>User Name</TableHead>
                 <TableHead>Role</TableHead>
                 <TableHead>Joined</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
@@ -222,14 +219,13 @@ export const UsersTab = () => {
                 return (
                   <TableRow key={userProfile.id}>
                     <TableCell className="font-medium">
-                      {userProfile.company_name}
+                      {userProfile.email || 'No email'}
                       {isMaster && (
                         <Badge variant="outline" className="ml-2 bg-primary/10 text-primary">
                           Master
                         </Badge>
                       )}
                     </TableCell>
-                    <TableCell>{userProfile.industry || '-'}</TableCell>
                     <TableCell>
                       <Badge variant={role === 'admin' ? 'default' : 'secondary'}>
                         {role === 'admin' ? (

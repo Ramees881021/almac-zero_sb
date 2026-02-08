@@ -335,6 +335,7 @@ export type Database = {
           company_size: string | null
           created_at: string
           currency: string
+          email: string | null
           id: string
           industry: string | null
           logo_url: string | null
@@ -350,6 +351,7 @@ export type Database = {
           company_size?: string | null
           created_at?: string
           currency?: string
+          email?: string | null
           id?: string
           industry?: string | null
           logo_url?: string | null
@@ -365,6 +367,7 @@ export type Database = {
           company_size?: string | null
           created_at?: string
           currency?: string
+          email?: string | null
           id?: string
           industry?: string | null
           logo_url?: string | null
