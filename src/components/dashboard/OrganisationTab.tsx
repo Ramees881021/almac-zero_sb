@@ -274,12 +274,12 @@ export const OrganisationTab = () => {
           {/* Logo */}
           <div className="absolute -top-16 left-6">
             <div className="relative">
-              <div className="w-32 h-32 rounded-lg border-4 border-background bg-muted flex items-center justify-center overflow-hidden shadow-lg">
+              <div className="w-32 h-32 rounded-lg border-4 border-background bg-white flex items-center justify-center overflow-hidden shadow-lg">
                 {logoUrl ? (
                   <img
                     src={logoUrl}
                     alt="Company logo"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain p-2"
                   />
                 ) : (
                   <Building2 className="h-12 w-12 text-muted-foreground" />
