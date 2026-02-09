@@ -86,14 +86,37 @@ export const DocumentsManagement = ({
         .from('organization-assets')
         .getPublicUrl(fileName);
 
-      // Update all credentials of this type with the new logo
-      const { error: updateError } = await supabase
+      // Check if a credential of this type exists for the user
+      const { data: existingCredentials } = await supabase
         .from('sustainability_credentials')
-        .update({ logo_url: publicUrl })
+        .select('id')
         .eq('user_id', user.id)
         .eq('credential_type', credentialType);
 
-      if (updateError) throw updateError;
+      if (existingCredentials && existingCredentials.length > 0) {
+        // Update all credentials of this type with the new logo
+        const { error: updateError } = await supabase
+          .from('sustainability_credentials')
+          .update({ logo_url: publicUrl })
+          .eq('user_id', user.id)
+          .eq('credential_type', credentialType);
+
+        if (updateError) throw updateError;
+      } else {
+        // Create a new credential record with the logo
+        const { error: insertError } = await supabase
+          .from('sustainability_credentials')
+          .insert({
+            user_id: user.id,
+            credential_type: credentialType,
+            credential_name: credentialType,
+            logo_url: publicUrl,
+            status: 'active',
+            display_order: credentials.length
+          });
+
+        if (insertError) throw insertError;
+      }
 
       onLogoUpdate(credentialType, publicUrl);
       toast.success(`Logo updated for ${credentialType}`);
