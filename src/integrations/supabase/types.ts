@@ -395,6 +395,7 @@ export type Database = {
           credential_type: string
           display_order: number | null
           id: string
+          logo_url: string | null
           organization_id: string | null
           score_or_level: string | null
           status: string | null
@@ -410,6 +411,7 @@ export type Database = {
           credential_type: string
           display_order?: number | null
           id?: string
+          logo_url?: string | null
           organization_id?: string | null
           score_or_level?: string | null
           status?: string | null
@@ -425,6 +427,7 @@ export type Database = {
           credential_type?: string
           display_order?: number | null
           id?: string
+          logo_url?: string | null
           organization_id?: string | null
           score_or_level?: string | null
           status?: string | null

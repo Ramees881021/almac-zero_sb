@@ -3,7 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useDashboard } from '@/contexts/DashboardContext';
 import { useMode } from '@/contexts/ModeContext';
 import { supabase } from '@/integrations/supabase/client';
-import { LayoutDashboard, BarChart3, Award, Users, Target, LogOut, Pencil, Check, X, Calendar, Wallet, Building2, ClipboardCheck, BrainCircuit, UsersRound } from 'lucide-react';
+import { LayoutDashboard, BarChart3, Award, Users, Target, LogOut, Pencil, Check, X, Calendar, Wallet, Building2, ClipboardCheck, BrainCircuit, UsersRound, ChevronDown, FolderOpen } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { ModeToggle } from './ModeToggle';
 
-type TabType = 'overview' | 'emissions' | 'scorecard' | 'clients' | 'netzero' | 'carbonbudget' | 'organisation' | 'reporting' | 'predictive' | 'users';
+type TabType = 'overview' | 'emissions' | 'scorecard' | 'clients' | 'netzero' | 'carbonbudget' | 'organisation' | 'organisation-documents' | 'reporting' | 'predictive' | 'users';
 
 interface Profile {
   id: string;
@@ -30,16 +30,24 @@ interface SidebarProps {
   onProfileUpdate: (profile: Profile) => void;
   isAdmin?: boolean;
 }
-const navItems: {
+interface NavItem {
   id: TabType;
   label: string;
   icon: React.ElementType;
   businessOnly?: boolean;
   adminOnly?: boolean;
-}[] = [{
+  subItems?: NavItem[];
+}
+
+const navItems: NavItem[] = [{
   id: 'organisation',
   label: 'Organisation',
-  icon: Building2
+  icon: Building2,
+  subItems: [{
+    id: 'organisation-documents',
+    label: 'Documents Management',
+    icon: FolderOpen
+  }]
 }, {
   id: 'emissions',
   label: 'Emissions',
@@ -107,6 +115,20 @@ export const Sidebar = ({
   } = useMode();
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(profile?.company_name || '');
+  const [expandedItems, setExpandedItems] = useState<Set<TabType>>(new Set());
+
+  // Toggle expansion of a nav item
+  const toggleExpand = (id: TabType) => {
+    setExpandedItems(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
 
   // Filter nav items based on mode and admin status
   const filteredNavItems = navItems.filter(item => {
@@ -191,12 +213,61 @@ export const Sidebar = ({
       {/* Navigation */}
       <nav className="flex-1 p-4 overflow-y-auto">
         <ul className="space-y-1">
-          {filteredNavItems.map(item => <li key={item.id} className="animate-fade-in">
-              <button onClick={() => onTabChange(item.id)} className={cn("w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-300", activeTab === item.id ? "bg-sidebar-primary text-sidebar-primary-foreground" : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground")}>
-                <item.icon className="h-5 w-5" />
-                {item.label}
-              </button>
-            </li>)}
+          {filteredNavItems.map(item => {
+            const hasSubItems = item.subItems && item.subItems.length > 0;
+            const isExpanded = expandedItems.has(item.id);
+            const isActive = activeTab === item.id || (hasSubItems && item.subItems?.some(sub => activeTab === sub.id));
+            
+            return (
+              <li key={item.id} className="animate-fade-in">
+                <button 
+                  onClick={() => {
+                    if (hasSubItems) {
+                      toggleExpand(item.id);
+                      onTabChange(item.id);
+                    } else {
+                      onTabChange(item.id);
+                    }
+                  }} 
+                  className={cn(
+                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-300",
+                    isActive ? "bg-sidebar-primary text-sidebar-primary-foreground" : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                  )}
+                >
+                  <item.icon className="h-5 w-5" />
+                  <span className="flex-1 text-left">{item.label}</span>
+                  {hasSubItems && (
+                    <ChevronDown className={cn(
+                      "h-4 w-4 transition-transform duration-200",
+                      isExpanded && "rotate-180"
+                    )} />
+                  )}
+                </button>
+                
+                {/* Sub-items */}
+                {hasSubItems && isExpanded && (
+                  <ul className="mt-1 ml-4 space-y-1">
+                    {item.subItems?.map(subItem => (
+                      <li key={subItem.id}>
+                        <button
+                          onClick={() => onTabChange(subItem.id)}
+                          className={cn(
+                            "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200",
+                            activeTab === subItem.id 
+                              ? "bg-sidebar-accent text-sidebar-foreground font-medium" 
+                              : "text-sidebar-foreground/60 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
+                          )}
+                        >
+                          <subItem.icon className="h-4 w-4" />
+                          {subItem.label}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </nav>
 
