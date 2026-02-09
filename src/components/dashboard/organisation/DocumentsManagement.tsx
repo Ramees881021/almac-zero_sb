@@ -86,37 +86,23 @@ export const DocumentsManagement = ({
         .from('organization-assets')
         .getPublicUrl(fileName);
 
-      // Check if a credential of this type exists for the user
-      const { data: existingCredentials } = await supabase
+      // Store logo in credential_type_logos table (upsert)
+      const { error: upsertError } = await supabase
+        .from('credential_type_logos')
+        .upsert({
+          user_id: user.id,
+          credential_type: credentialType,
+          logo_url: publicUrl
+        }, { onConflict: 'user_id,credential_type' });
+
+      if (upsertError) throw upsertError;
+
+      // Also update any existing credentials of this type
+      await supabase
         .from('sustainability_credentials')
-        .select('id')
+        .update({ logo_url: publicUrl })
         .eq('user_id', user.id)
         .eq('credential_type', credentialType);
-
-      if (existingCredentials && existingCredentials.length > 0) {
-        // Update all credentials of this type with the new logo
-        const { error: updateError } = await supabase
-          .from('sustainability_credentials')
-          .update({ logo_url: publicUrl })
-          .eq('user_id', user.id)
-          .eq('credential_type', credentialType);
-
-        if (updateError) throw updateError;
-      } else {
-        // Create a new credential record with the logo
-        const { error: insertError } = await supabase
-          .from('sustainability_credentials')
-          .insert({
-            user_id: user.id,
-            credential_type: credentialType,
-            credential_name: credentialType,
-            logo_url: publicUrl,
-            status: 'active',
-            display_order: credentials.length
-          });
-
-        if (insertError) throw insertError;
-      }
 
       onLogoUpdate(credentialType, publicUrl);
       toast.success(`Logo updated for ${credentialType}`);
@@ -132,13 +118,21 @@ export const DocumentsManagement = ({
     if (!user) return;
     
     try {
+      // Remove from credential_type_logos table
       const { error } = await supabase
-        .from('sustainability_credentials')
-        .update({ logo_url: null })
+        .from('credential_type_logos')
+        .delete()
         .eq('user_id', user.id)
         .eq('credential_type', credentialType);
 
       if (error) throw error;
+
+      // Also update any existing credentials
+      await supabase
+        .from('sustainability_credentials')
+        .update({ logo_url: null })
+        .eq('user_id', user.id)
+        .eq('credential_type', credentialType);
 
       onLogoUpdate(credentialType, null);
       toast.success(`Logo removed for ${credentialType}`);
