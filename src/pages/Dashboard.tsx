@@ -15,12 +15,13 @@ import { OrganisationTab } from '@/components/dashboard/OrganisationTab';
 import { ReportingTab } from '@/components/dashboard/ReportingTab';
 import { PredictiveAnalyticsTab } from '@/components/dashboard/PredictiveAnalyticsTab';
 import { UsersTab } from '@/components/dashboard/UsersTab';
+import { DocumentsManagementTab } from '@/components/dashboard/DocumentsManagementTab';
 import { AlmacLogo } from '@/components/ui/AlmacLogo';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAdmin } from '@/hooks/useAdmin';
 
-type TabType = 'overview' | 'emissions' | 'scorecard' | 'clients' | 'netzero' | 'carbonbudget' | 'organisation' | 'reporting' | 'predictive' | 'users';
+type TabType = 'overview' | 'emissions' | 'scorecard' | 'clients' | 'netzero' | 'carbonbudget' | 'organisation' | 'organisation-documents' | 'reporting' | 'predictive' | 'users';
 
 interface Profile {
   id: string;
@@ -43,7 +44,7 @@ const DashboardContent = () => {
 
   // Reset to valid tab when switching modes
   useEffect(() => {
-    const businessOnlyTabs: TabType[] = ['predictive', 'scorecard', 'clients', 'carbonbudget', 'reporting', 'users'];
+    const businessOnlyTabs: TabType[] = ['predictive', 'scorecard', 'clients', 'carbonbudget', 'reporting', 'users', 'organisation-documents'];
     if (isPresenterMode && businessOnlyTabs.includes(activeTab)) {
       setActiveTab('overview');
     }
@@ -108,6 +109,7 @@ const DashboardContent = () => {
           "animate-fade-in"
         )}>
           {activeTab === 'organisation' && <OrganisationTab />}
+          {activeTab === 'organisation-documents' && !isPresenterMode && <DocumentsManagementTab />}
           {activeTab === 'overview' && <OverviewTab />}
           {activeTab === 'predictive' && !isPresenterMode && <PredictiveAnalyticsTab />}
           {activeTab === 'emissions' && <EmissionsTab />}

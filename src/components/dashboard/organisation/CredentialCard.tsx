@@ -31,6 +31,7 @@ interface Credential {
   valid_until: string | null;
   attachment_url: string | null;
   certificate_url: string | null;
+  logo_url?: string | null;
 }
 
 interface CredentialCardProps {
@@ -101,8 +102,16 @@ export const CredentialCard = ({ credential, onDelete, onViewDocument }: Credent
 
       <div className="text-center space-y-2">
         <div className="flex justify-center mb-2">
-          <div className="w-10 h-10 rounded-full bg-current/10 flex items-center justify-center">
-            <IconComponent className="h-5 w-5" />
+          <div className="w-10 h-10 rounded-full bg-current/10 flex items-center justify-center overflow-hidden">
+            {credential.logo_url ? (
+              <img 
+                src={credential.logo_url} 
+                alt={credential.credential_type} 
+                className="w-full h-full object-contain"
+              />
+            ) : (
+              <IconComponent className="h-5 w-5" />
+            )}
           </div>
         </div>
         <div className="font-bold text-sm">{credential.credential_type}</div>

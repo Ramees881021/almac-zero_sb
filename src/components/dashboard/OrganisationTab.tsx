@@ -30,6 +30,7 @@ interface Credential {
   attachment_url: string | null;
   certificate_url: string | null;
   display_order: number;
+  logo_url: string | null;
 }
 
 export const OrganisationTab = () => {
