@@ -52,7 +52,6 @@ interface PredictionDataPoint {
 interface ScenarioParams {
   growthRate: number;
   reductionTarget: number;
-  renewableEnergy: number;
 }
 
 interface ScenarioResult {
@@ -71,8 +70,7 @@ export const PredictiveAnalyticsTab = () => {
   const [isSimulating, setIsSimulating] = useState(false);
   const [scenarioParams, setScenarioParams] = useState<ScenarioParams>({
     growthRate: 2,
-    reductionTarget: 4.2,
-    renewableEnergy: 30
+    reductionTarget: 4.2
   });
   const [scenarios, setScenarios] = useState<ScenarioResult[]>([]);
 
@@ -257,12 +255,10 @@ export const PredictiveAnalyticsTab = () => {
       const yearsAhead = year - currentYear;
       const growthFactor = 1 + (scenarioParams.growthRate / 100);
       const reductionFactor = 1 - (scenarioParams.reductionTarget / 100);
-      const renewableFactor = 1 - (scenarioParams.renewableEnergy / 100) * 0.3;
       
       const predicted = baselineEmissions * 
         Math.pow(growthFactor, yearsAhead) * 
-        Math.pow(reductionFactor, yearsAhead) *
-        renewableFactor;
+        Math.pow(reductionFactor, yearsAhead);
       
       scenarioData.push({
         year,
@@ -528,20 +524,6 @@ export const PredictiveAnalyticsTab = () => {
                 />
               </div>
 
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <Label className="text-sm font-medium">Renewable Energy Mix</Label>
-                  <span className="text-sm text-muted-foreground">{scenarioParams.renewableEnergy}%</span>
-                </div>
-                <Slider
-                  value={[scenarioParams.renewableEnergy]}
-                  onValueChange={([v]) => setScenarioParams(p => ({ ...p, renewableEnergy: v }))}
-                  min={0}
-                  max={100}
-                  step={5}
-                  className="w-full"
-                />
-              </div>
 
               <Button 
                 onClick={handleRunSimulation} 
