@@ -46,7 +46,8 @@ const navItems: NavItem[] = [{
   subItems: [{
     id: 'organisation-documents',
     label: 'Documents Management',
-    icon: FolderOpen
+    icon: FolderOpen,
+    adminOnly: true
   }]
 }, {
   id: 'emissions',
@@ -247,7 +248,13 @@ export const Sidebar = ({
                 {/* Sub-items */}
                 {hasSubItems && isExpanded && (
                   <ul className="mt-1 ml-4 space-y-1">
-                    {item.subItems?.map(subItem => (
+                    {item.subItems
+                      ?.filter(subItem => {
+                        if (isPresenterMode && subItem.businessOnly) return false;
+                        if (subItem.adminOnly && !isAdmin) return false;
+                        return true;
+                      })
+                      .map(subItem => (
                       <li key={subItem.id}>
                         <button
                           onClick={() => onTabChange(subItem.id)}

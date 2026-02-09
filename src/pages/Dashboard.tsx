@@ -109,7 +109,7 @@ const DashboardContent = () => {
           "animate-fade-in"
         )}>
           {activeTab === 'organisation' && <OrganisationTab />}
-          {activeTab === 'organisation-documents' && !isPresenterMode && <DocumentsManagementTab />}
+          {activeTab === 'organisation-documents' && !isPresenterMode && isAdmin && <DocumentsManagementTab />}
           {activeTab === 'overview' && <OverviewTab />}
           {activeTab === 'predictive' && !isPresenterMode && <PredictiveAnalyticsTab />}
           {activeTab === 'emissions' && <EmissionsTab />}
