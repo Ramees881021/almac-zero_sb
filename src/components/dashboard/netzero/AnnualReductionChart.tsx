@@ -34,12 +34,11 @@ export const AnnualReductionChart = ({ data, nearTermYear }: AnnualReductionChar
               <Legend />
               <Bar 
                 dataKey="Required Reduction" 
-                fill="hsl(var(--chart-3))" 
-                opacity={0.6}
+                fill="#b388ff" 
               />
               <Bar 
                 dataKey="Actual Reduction" 
-                fill="hsl(var(--primary))" 
+                fill="#4caf50" 
               />
             </BarChart>
           </ResponsiveContainer>
