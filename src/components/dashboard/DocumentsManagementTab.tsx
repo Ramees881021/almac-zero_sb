@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { DocumentsManagement } from './organisation/DocumentsManagement';
 import { Loader2 } from 'lucide-react';
 
-interface Credential {
+interface CredentialLogo {
   id: string;
   credential_type: string;
   logo_url: string | null;
@@ -12,55 +12,66 @@ interface Credential {
 
 export const DocumentsManagementTab = () => {
   const { user } = useAuth();
-  const [credentials, setCredentials] = useState<Credential[]>([]);
+  const [credentialLogos, setCredentialLogos] = useState<CredentialLogo[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchCredentials();
+    fetchCredentialLogos();
   }, [user]);
 
-  const fetchCredentials = async () => {
+  const fetchCredentialLogos = async () => {
     if (!user) return;
 
+    // Fetch from credential_type_logos table (not sustainability_credentials)
     const { data, error } = await supabase
-      .from('sustainability_credentials')
+      .from('credential_type_logos')
       .select('id, credential_type, logo_url')
       .eq('user_id', user.id);
 
     if (!error && data) {
-      setCredentials(data);
+      setCredentialLogos(data);
     }
     setLoading(false);
   };
 
   const handleLogoUpdate = (credentialType: string, logoUrl: string | null) => {
-    setCredentials(prev => 
-      prev.map(c => 
-        c.credential_type === credentialType 
-          ? { ...c, logo_url: logoUrl } 
-          : c
-      )
-    );
+    if (logoUrl) {
+      // Add or update the logo
+      setCredentialLogos(prev => {
+        const existing = prev.find(c => c.credential_type === credentialType);
+        if (existing) {
+          return prev.map(c => 
+            c.credential_type === credentialType 
+              ? { ...c, logo_url: logoUrl } 
+              : c
+          );
+        } else {
+          return [...prev, { id: crypto.randomUUID(), credential_type: credentialType, logo_url: logoUrl }];
+        }
+      });
+    } else {
+      // Remove the logo
+      setCredentialLogos(prev => prev.filter(c => c.credential_type !== credentialType));
+    }
   };
 
   const handleCredentialAdd = async (credentialType: string, label: string) => {
+    // This only adds to the logo list, not to sustainability_credentials
+    // The actual credential should be added via "Add Credential" button
     if (!user) return;
 
-    // Add a placeholder credential with the new type
     const { data, error } = await supabase
-      .from('sustainability_credentials')
+      .from('credential_type_logos')
       .insert({
         user_id: user.id,
         credential_type: credentialType,
-        credential_name: label,
-        status: 'active',
-        display_order: credentials.length
+        logo_url: ''
       })
       .select('id, credential_type, logo_url')
       .single();
 
     if (!error && data) {
-      setCredentials(prev => [...prev, data]);
+      setCredentialLogos(prev => [...prev, data]);
     }
   };
 
@@ -74,7 +85,7 @@ export const DocumentsManagementTab = () => {
 
   return (
     <DocumentsManagement
-      credentials={credentials}
+      credentials={credentialLogos}
       onLogoUpdate={handleLogoUpdate}
       onCredentialAdd={handleCredentialAdd}
     />

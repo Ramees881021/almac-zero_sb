@@ -59,7 +59,7 @@ export const OrganisationTab = () => {
   const fetchData = async () => {
     if (!user) return;
 
-    const [profileResult, credentialsResult] = await Promise.all([
+    const [profileResult, credentialsResult, logosResult] = await Promise.all([
       supabase
         .from('profiles')
         .select('id, company_name, logo_url, banner_url, summary')
@@ -69,7 +69,11 @@ export const OrganisationTab = () => {
         .from('sustainability_credentials')
         .select('*')
         .eq('user_id', user.id)
-        .order('display_order', { ascending: true })
+        .order('display_order', { ascending: true }),
+      supabase
+        .from('credential_type_logos')
+        .select('credential_type, logo_url')
+        .eq('user_id', user.id)
     ]);
 
     if (profileResult.data) {
@@ -79,7 +83,23 @@ export const OrganisationTab = () => {
     }
 
     if (credentialsResult.data) {
-      setCredentials(credentialsResult.data);
+      // Merge logos from credential_type_logos table
+      const logoMap = new Map<string, string>();
+      if (logosResult.data) {
+        logosResult.data.forEach(logo => {
+          if (logo.logo_url) {
+            logoMap.set(logo.credential_type, logo.logo_url);
+          }
+        });
+      }
+
+      // Apply logos to credentials
+      const credentialsWithLogos = credentialsResult.data.map(cred => ({
+        ...cred,
+        logo_url: logoMap.get(cred.credential_type) || cred.logo_url
+      }));
+
+      setCredentials(credentialsWithLogos);
     }
 
     setLoading(false);
