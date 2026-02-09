@@ -37,7 +37,9 @@ export const LoginForm = ({ onSwitchToSignup, onForgotPassword }: LoginFormProps
   return (
     <Card className="w-full border-0 shadow-none">
       <CardHeader className="text-center space-y-2 px-0">
-        <CardTitle className="text-2xl font-bold">Welcome to Almac Zero</CardTitle>
+        <CardTitle className="text-2xl font-bold">
+          Welcome to <span className="text-foreground">Almac</span><span style={{ color: '#00d084' }}>Zero</span>
+        </CardTitle>
         <CardDescription>Sign in to your sustainability dashboard</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
