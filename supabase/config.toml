@@ -1,0 +1,16 @@
+project_id = "lcjimtxqjgnbuagseixn"
+
+[functions.classify-suppliers]
+verify_jwt = false
+
+[functions.copy-master-data]
+verify_jwt = false
+
+[functions.assign-emission-factor]
+verify_jwt = false
+
+[functions.assign-wtt-factors]
+verify_jwt = false
+
+[functions.assign-hotel-factor]
+verify_jwt = false
